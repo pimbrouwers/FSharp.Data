@@ -1,78 +1,79 @@
-# F# Data: Library for Data Access
+# F# JsonValue
 
-The F# Data library (`FSharp.Data.dll`) implements everything you need to access data in your F# applications
-and scripts. It implements F# type providers for working with structured file formats (CSV, HTML, JSON and XML) and
-for accessing the WorldBank data. It also includes helpers for parsing CSV, HTML and JSON files and for sending HTTP requests.
+This is an export of the core Json functionality from the amazing [FSharp.Data](https://github.com/fsharp/FSharp.Data) package.
 
-We're open to contributions from anyone. If you want to help out but don't know where to start, you can take one of the [Up-For-Grabs](https://github.com/fsharp/FSharp.Data/labels/up-for-grabs) issues, or help to improve the [documentation][3].
+The goal of this fork was to reduce the dependency graph and support .NET Standard 2.0, while supporting all existing functionality. The only exception, is that the HTTP methods for requesting/sending JSON have been removed. My belief was that the responsibility of the library should be restricted to working with JSON, not obtaining it from an HTTP resource.
 
-You can see the version history [here](RELEASE_NOTES.md).
+> The namespace has been changed to `FSharp.Data.Json` to avoid confusion.
 
-[![NuGet Badge](http://img.shields.io/nuget/v/FSharp.Data.svg?style=flat)](https://www.nuget.org/packages/FSharp.Data)
+The documentation below, has been exported from: [http://fsharp.github.io/FSharp.Data/library/JsonValue.html](http://fsharp.github.io/FSharp.Data/library/JsonValue.html)
 
-## Building
+## Loading JSON documents
 
-- Install .NET SDK 2.1.401 or higher
-- Build FSharp.Data.sln and FSharp.Data.Tests.sln in Visual Studio 2017, Visual Studio 2017 for Mac (previously Xamarin Studio), or MonoDevelop. You can also use the FAKE script:
+To load a sample JSON document, we first need to reference the `FSharp.Data.dll` library
+(when using F# Interactive) or to add reference to a project. 
 
-  * Windows: Run *build.cmd* 
-    * [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/vlw9avsb91rjfy39)](https://ci.appveyor.com/project/ovatsus/fsharp-data)
-  * Mono: Run *build.sh*
-    * [![Travis build status](https://travis-ci.org/fsharp/FSharp.Data.svg)](https://travis-ci.org/fsharp/FSharp.Data)
+```f#
+open FSharp.Data.Json
 
-## Supported F# Runtimes
+let info =
+  JsonValue.Parse(""" 
+    { "name": "Tomas", "born": 1985,
+      "siblings": [ "Jan", "Alexander" ] } """)
+```
 
-When targeting .NET Framework 4.5+:
+## Using JSON extensions
 
-- FSharp.Core 4.3.1.0. nuget 3.1.x (default for F# 3.1/Visual Studio 2013)
-- FSharp.Core 4.4.0.0, nuget 4.0.x (default for F# 4.0/Visual Studio 2015)
-- FSharp.Core 4.4.1.0, nuget 4.2.x (default for F# Tools 4.1 SDK / Visual Studio 2017)
-- FSharp.Core 4.4.3.0, nuget 4.3.x (default for F# Tools 10.1 SDK / Visual Studio 2017 15.6+)
-- or higher versions of the same
+We do not cover this technique in this introduction. Instead, we look at a number
+of extensions that become available after opening the `FSharp.Data.JsonExtensions` 
+namespace. Once opened, we can write:
+ * `value.AsBoolean()` returns the value as boolean if it is either `true` or `false`.
+ * `value.AsInteger()` returns the value as integer if it is numeric and can be
+   converted to an integer; `value.AsInteger64()`, `value.AsDecimal()` and
+   `value.AsFloat()` behave similarly.
+ * `value.AsString()` returns the value as a string.
+ * `value.AsDateTime()` parses the string as a `DateTime` value using either the
+    [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) format, or using the 
+    `\/Date(...)\/` JSON format containing number of milliseconds since 1/1/1970.
+ * `value.AsDateTimeOffset()` parses the string as a `DateTimeOffset` value using either the
+    [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) format, or using the 
+    `\/Date(...[+/-]offset)\/` JSON format containing number of milliseconds since 1/1/1970, 
+    [+/-] the 4 digit offset. Example- `\/Date(1231456+1000)\/`.
+ * `value.AsTimeSpan()` parses the string as a `TimeSpan` value.
+ * `value.AsGuid()` parses the string as a `Guid` value.
+ * `value?child` uses the dynamic operator to obtain a record member named `child`;
+    alternatively, you can also use `value.GetProperty(child)` or an indexer
+    `value.[child]`.
+ * `value.TryGetProperty(child)` can be used to safely obtain a record member 
+    (if the member is missing or the value is not a record then, `TryGetProperty` 
+    returns `None`).
+ * `[ for v in value -> v ]` treats `value` as a collection and iterates over it;
+   alternatively, it is possible to obtain all elements as an array using 
+   `value.AsArray()`.
+ * `value.Properties()` returns a list of all properties of a record node.
+ * `value.InnerText()` concatenates all text or text in an array 
+   (representing e.g. multi-line string).
+Methods that may need to parse a numeric value or date (such as `AsFloat` and
+`AsDateTime`) receive an optional culture parameter.
+The following example shows how to process the sample JSON value:
 
-When targeting .NET Standard 2.0 or .NET Core App 2.x:
+```f#
+open FSharp.Data.Json.JsonExtensions
 
-- FSharp.Core 4.4.1.0, nuget 4.2.x (default for F# Tools 4.1 SDK / Visual Studio 2017) or higher
-- FSharp.Core 4.4.3.0, nuget 4.3.x (default for F# Tools 10.1 SDK / Visual Studio 2017 15.6+)
-- or higher versions of the same
+// Print name and birth year
+let n = info?name
+printfn "%s (%d)" (info?name.AsString()) (info?born.AsInteger())
 
-## Supported Design-time Environments
+// Print names of all siblings
+for sib in info?siblings do
+  printfn "%s" (sib.AsString())
+```
 
-- .NET SDK 2.1.401 or higher (runs tools using .NET Core)
-- Visual F# Tools 4.1 or higher (runs tools using .NET Framework)
-- Mono 5.12.0 or higher (runs tools using Mono)
-- Visual Studio 2017 or higher (runs tools using .NET Framework)
-- Other F# tooling based on FSharp.Compiler.Service must have FSharp.Compiler.Service 21.0+ and FSharp.Core nuget 4.2.x+.
 
-## Documentation
+## Find a bug?
 
-This library comes with comprehensive documentation. The documentation is 
-automatically generated from `*.fsx` files in [the content folder][2] and from the comments in the code. If you find a typo, please submit a pull request!
+There's an [issue](https://github.com/pimbrouwers/FSharp.Data.JsonValue/issues) for that.
 
- - [F# Data Library home page][3] with more information about the library, contributions, etc.
- - The samples from the documentation are included as part of `FSharp.Data.Tests.sln`, make sure you build the
-solution before trying out the samples to ensure that all needed packages are installed.
+## License
 
-## Support and community
-
- - If you have a question about `FSharp.Data`, ask at StackOverflow and [mark your question with the `f#-data` tag](http://stackoverflow.com/questions/tagged/f%23-data). 
- - If you want to submit a bug, a feature request or help with fixing bugs then look at [issues](https://github.com/fsharp/FSharp.Data/issues) and read [contributing to F# Data](https://github.com/fsharp/FSharp.Data/blob/master/CONTRIBUTING.md).
- - To discuss more general issues about F# Data, its goals and other open-source F# projects, join the [fsharp-opensource mailing list](http://groups.google.com/group/fsharp-opensource)
-
-## Code of Conduct
-
-This repository is governed by the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/).
-
-We pledge to be overt in our openness, welcoming all people to contribute, and pledging in return to value them as whole human beings and to foster an atmosphere of kindness, cooperation, and understanding.
-
-## Library license
-
-The library is available under Apache 2.0. For more information see the [License file][1] in the GitHub repository.
-
-## Maintainers
-
-Although this project is hosted in the [fsharp](https://github.com/fsharp) repository for historical reasons, it is _not_ maintained and managed by the F# Core Engineering Group. The F# Core Engineering Group acknowledges that the independent owners and maintainers of this project are [Gustavo Guerra](http://github.com/ovatsus), [Tomas Petricek](http://github.com/tpetricek) and [Colin Bull](http://github.com/colinbull).
-
- [1]: https://github.com/fsharp/FSharp.Data/blob/master/LICENSE.md
- [2]: https://github.com/fsharp/FSharp.Data/tree/master/docs/content
- [3]: http://fsharp.github.io/FSharp.Data/
+Maintained with ♥ by [Pim Brouwers](https://github.com/pimbrouwers) in Toronto, ON. Licensed under [Apache License 2.0](https://github.com/pimbrouwers/FSharp.Data.JsonValue/blob/master/LICENSE).

@@ -2,8 +2,8 @@ module FSharp.Data.JsonValue.Tests
 
 open System
 open System.Globalization
-open FSharp.Data
-open FSharp.Data.JsonExtensions
+open FSharp.Data.Json
+open FSharp.Data.Json.JsonExtensions
 open FsUnit
 open FsUnit.Xunit
 open Xunit

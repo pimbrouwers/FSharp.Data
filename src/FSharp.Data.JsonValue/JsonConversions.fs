@@ -2,10 +2,10 @@
 // Helper operations for converting converting json values to other types
 // --------------------------------------------------------------------------------------
 
-namespace FSharp.Data.Runtime
+namespace FSharp.Data.Json.Runtime
 
 open System
-open FSharp.Data
+open FSharp.Data.Json
 
 [<AutoOpen>]
 module private Helpers =
