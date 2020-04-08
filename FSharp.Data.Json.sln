@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AA78119E-2825-4151-BE8F-45CF95E4BF3F}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Data.JsonValue", "src\FSharp.Data.JsonValue\FSharp.Data.JsonValue.fsproj", "{9112AB45-67AD-4C76-A900-D146E67C7366}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Data.Json", "src\FSharp.Data.Json\FSharp.Data.Json.fsproj", "{9112AB45-67AD-4C76-A900-D146E67C7366}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Data.JsonValue.Tests", "src\FSharp.Data.JsonValue.Tests\FSharp.Data.JsonValue.Tests.fsproj", "{EA737D29-1CD9-4829-8B7C-0E7ECD668514}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Data.Json.Tests", "src\FSharp.Data.Json.Tests\FSharp.Data.Json.Tests.fsproj", "{EA737D29-1CD9-4829-8B7C-0E7ECD668514}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FSharp.Data.JsonValue\FSharp.Data.JsonValue.fsproj" />
+    <ProjectReference Include="..\FSharp.Data.Json\FSharp.Data.Json.fsproj" />
   </ItemGroup>
 
 </Project>
