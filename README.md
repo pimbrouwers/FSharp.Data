@@ -1,6 +1,6 @@
 # F# Json
 
-[![NuGet Version](https://img.shields.io/nuget/v/FSharp.Data.Json.svg)](https://www.nuget.org/packages/FSharp.Data.Json/1.0.0)
+[![NuGet Version](https://img.shields.io/nuget/v/FSharp.Data.Json.svg)](https://www.nuget.org/packages/FSharp.Data.Json)
 [![Build Status](https://travis-ci.org/pimbrouwers/FSharp.Data.Json.svg?branch=master)](https://travis-ci.org/pimbrouwers/FSharp.Data.Json)
 
 
