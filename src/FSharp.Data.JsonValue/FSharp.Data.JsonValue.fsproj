@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="TextConversions.fs" />
+	<Compile Include="JsonValue.fs" />	
+	<Compile Include="JsonConversions.fs" />
+	<Compile Include="JsonExtensions.fs" />
+  </ItemGroup>
+
+</Project>
