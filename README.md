@@ -31,7 +31,7 @@ let siblings =
 
 let person = 
     {
-        Name     = json ?name.AsString()
+        Name     = json?name.AsString()
         Born     = json?born.AsInteger()    
         Siblings = siblings
     }
