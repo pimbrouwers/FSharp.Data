@@ -1,5 +1,9 @@
 # F# Json
 
+[![NuGet Version](https://img.shields.io/nuget/v/FSharp.Data.Json.svg)](https://www.nuget.org/packages/FSharp.Data.Json/1.0.0)
+[![Build Status](https://travis-ci.org/pimbrouwers/FSharp.Data.Json.svg?branch=master)](https://travis-ci.org/pimbrouwers/FSharp.Data.Json)
+
+
 This is an export of the **core** Json functionality from the amazing [FSharp.Data](https://github.com/fsharp/FSharp.Data) package.
 
 The goal of this fork was to reduce the dependency graph, support .NET Standard 2.0 and offer dead-simple JSON interop, while supporting most existing functionality. HTTP methods for requesting/sending JSON have been removed. My belief was that the responsibility of the library should be restricted to working with JSON, not obtaining it from an HTTP resource. `JsonProvider` has also been removed.
