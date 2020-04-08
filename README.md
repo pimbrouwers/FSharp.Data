@@ -2,11 +2,9 @@
 
 This is an export of the core Json functionality from the amazing [FSharp.Data](https://github.com/fsharp/FSharp.Data) package.
 
-The goal of this fork was to reduce the dependency graph and support .NET Standard 2.0, while supporting all existing functionality. The only exception, is that the HTTP methods for requesting/sending JSON have been removed. My belief was that the responsibility of the library should be restricted to working with JSON, not obtaining it from an HTTP resource.
+The goal of this fork was to reduce the dependency graph, support .NET Standard 2.0 and offer dead-simple JSON interop, while supporting most existing functionality. HTTP methods for requesting/sending JSON have been removed. My belief was that the responsibility of the library should be restricted to working with JSON, not obtaining it from an HTTP resource. `JsonProvider` has also been removed.
 
-> The namespace has been changed to `FSharp.Data.Json` to avoid confusion.
-
-The documentation below, has been exported from: [http://fsharp.github.io/FSharp.Data/library/JsonValue.html](http://fsharp.github.io/FSharp.Data/library/JsonValue.html)
+> The documentation below, has been exported from: [http://fsharp.github.io/FSharp.Data/library/JsonValue.html](http://fsharp.github.io/FSharp.Data/library/JsonValue.html)
 
 ## Loading JSON documents
 
